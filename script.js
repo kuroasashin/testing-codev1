@@ -18,7 +18,7 @@ function showPosition(position) {
     const userLon = position.coords.longitude;
 
     if (isWithinGeofence(userLat, userLon, geofenceCenter, geofenceRadius)) {
-        document.getElementById('result').innerHTML = "You are **INSIDE** the geofenced area!";
+        contentFrame.removeAttribute('hidden');
     } else {
         document.getElementById('result').innerHTML = "You are **OUTSIDE** the geofenced area.";
     }
