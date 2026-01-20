@@ -1,47 +1,60 @@
-function getLocationAndCheck() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition, showError);
-  } else {
-    alert("Geolocation is not supported by this browser.");
-  }
-}
+document.getElementById('checkLocationBtn').addEventListener('click', function() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else {
+        document.getElementById('result').innerHTML = "Geolocation is not supported by this browser.";
+    }
+});
+
+// Define your geofence area (e.g., a simple circle around a specific point)
+const geofenceCenter = {
+    latitude: 35.6895,  // Example: Tokyo, Japan
+    longitude: 139.6917
+};
+const geofenceRadius = 1000; // Radius in meters (1 km)
 
 function showPosition(position) {
-  const lat = position.coords.latitude;
-  const lng = position.coords.longitude;
-  
-  // --- Geofencing Logic Example ---
-  // Check if within a hypothetical zone (e.g., 10.0 to 11.0 latitude, 100.0 to 101.0 longitude)
-  const inZone = (lat > 10.0 && lat < 11.0) && (lng > 100.0 && lng < 101.0);
-  
-  if (inZone) {
-    // If in zone, redirect or prepare to submit to Google Form
-    // Example: Redirect with coordinates as URL parameters
-    window.location.href = `https://docs.google.com/forms/d/e/1FAIpQLSc56AKRjO-izKZIV2Vum1GnfX1yOyt_AH-TuVNmkFqTH_kceA/viewform?latitude=${lat}&longitude=${lng}`;
-    // Or submit data to a backend script/Sheet
-    // submitToGoogleForm(lat, lng); 
-  } else {
-    alert("You are outside the allowed location.");
-  }
+    const userLat = position.coords.latitude;
+    const userLon = position.coords.longitude;
+
+    if (isWithinGeofence(userLat, userLon, geofenceCenter, geofenceRadius)) {
+        document.getElementById('result').innerHTML = "You are **INSIDE** the geofenced area!";
+    } else {
+        document.getElementById('result').innerHTML = "You are **OUTSIDE** the geofenced area.";
+    }
 }
 
 function showError(error) {
-  switch(error.code) {
-    case error.PERMISSION_DENIED:
-      alert("User denied the request for Geolocation.");
-      break;
-    case error.POSITION_UNAVAILABLE:
-      alert("Location information is unavailable.");
-      break;
-    case error.TIMEOUT:
-      alert("The request to get user location timed out.");
-      break;
-    case error.UNKNOWN_ERROR:
-      alert("An unknown error occurred.");
-      break;
-  }
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            document.getElementById('result').innerHTML = "User denied the request for Geolocation.";
+            break;
+        case error.POSITION_UNAVAILABLE:
+            document.getElementById('result').innerHTML = "Location information is unavailable.";
+            break;
+        case error.TIMEOUT:
+            document.getElementById('result').innerHTML = "The request to get user location timed out.";
+            break;
+        case error.UNKNOWN_ERROR:
+            document.getElementById('result').innerHTML = "An unknown error occurred.";
+            break;
+    }
 }
 
-// Call this function when your page loads or a button is clicked
-// getLocationAndCheck(); 
+// Function to calculate distance between two points (Haversine formula)
+function isWithinGeofence(userLat, userLon, center, radius) {
+    const R = 6371e3; // metres
+    const φ1 = userLat * Math.PI/180; // φ, λ in radians
+    const φ2 = center.latitude * Math.PI/180;
+    const Δφ = (center.latitude - userLat) * Math.PI/180;
+    const Δλ = (center.longitude - userLon) * Math.PI/180;
 
+    const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+              Math.cos(φ1) * Math.cos(φ2) *
+              Math.sin(Δλ/2) * Math.sin(Δλ/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+    const distance = R * c; // Distance in metres
+
+    return distance < radius;
+}
