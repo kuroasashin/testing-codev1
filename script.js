@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Example: Geofence around a specific area (e.g., your office)
     const centerLat = 1.3500; // Los Angeles
     const centerLng = 103.8991;
-    const radius = 200; // 1000 meters (1 km)
+    const radius = 500; // 1000 meters (1 km)
 
     // Function to calculate distance (Haversine formula - simplified)
     function calculateDistance(lat1, lon1, lat2, lon2) {
