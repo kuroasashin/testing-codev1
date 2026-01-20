@@ -11,7 +11,7 @@ const geofenceCenter = {
     latitude: 1.3500,  // Example: Tokyo, Japan
     longitude: 103.8991
 };
-const geofenceRadius = 500; // Radius in meters (1 km)
+const geofenceRadius = 150; // Radius in meters (1 km)
 
 function showPosition(position) {
     const userLat = position.coords.latitude;
