@@ -1,4 +1,4 @@
-function myFunction() {
+function Tgvis() {
   var x = document.getElementById("myIframe");
   if (x.style.display === "none") {
     x.style.display = "block";
