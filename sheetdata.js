@@ -4,7 +4,7 @@ function doGet() {
 
 function getData() {
   // REPLACE WITH YOUR SPREADSHEET ID
-  var spreadSheetId = "YOUR_SPREADSHEET_ID"; 
+  var spreadSheetId = "1cZsTQbvW8nJ7xp1NqhRYeGWU_vkOxUY92HWQjAAr55c"; 
   // REPLACE WITH YOUR DATA RANGE (e.g., "Sheet1!A2:A")
   var dataRange = "YOUR_DATA_RANGE"; 
 
